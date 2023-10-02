@@ -42,8 +42,7 @@ namespace todoApi.Controllers
                  {
                     item.Id = Guid.NewGuid().ToString(); // Generating a new unique string ID if not provided
                  }
-                     Console.WriteLine($"this is id >>>>>>>> {item.Id}"); // Debugging line to check the Id value
-                        Console.WriteLine($"this is item >>>>>>>> {System.Text.Json.JsonSerializer.Serialize(item)}");
+
                  await _cosmosDbService.AddItemAsync(item);
              return Ok();
         }
