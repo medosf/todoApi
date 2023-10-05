@@ -21,6 +21,11 @@ namespace todoApi.Controllers
         public async Task<ActionResult<IEnumerable<TodoItem>>> GetAll()
         {
             var items = await _cosmosDbService.GetItemsAsync("SELECT * FROM c");
+               if (items == null)
+            {
+                return NotFound("Somthing went wrong");
+            }
+          
             return Ok(items);
         }
 
@@ -30,7 +35,7 @@ namespace todoApi.Controllers
             var item = await _cosmosDbService.GetItemAsync(id);
             if (item == null)
             {
-                return NotFound();
+                return NotFound("Somthing went wrong");
             }
             return item;
         }
