@@ -9,7 +9,7 @@ namespace todoApi.Controllers
         [HttpGet]
         public ActionResult<string> Get()
         {
-            return "Welcome to Todo API!";
+            return File("~/index.html", "text/html");
         }
     }
 }
