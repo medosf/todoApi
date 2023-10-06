@@ -18,15 +18,16 @@ public class CosmosDbService
  // Add a new ToDo item
 public async Task AddItemAsync(TodoItem item)
 {
-    await _container.CreateItemAsync(item, new PartitionKey(item.Id));
+    await _container.CreateItemAsync(item, PartitionKey.None);
 }
 
 // Get a ToDo item by Id
+// check adding partition key
 public async Task<TodoItem> GetItemAsync(string id)
 {
     try
     {
-        ItemResponse<TodoItem> response = await _container.ReadItemAsync<TodoItem>(id, new PartitionKey(id));
+        ItemResponse<TodoItem> response = await _container.ReadItemAsync<TodoItem>(id, PartitionKey.None);
         return response.Resource;
     }
     catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
@@ -38,13 +39,13 @@ public async Task<TodoItem> GetItemAsync(string id)
 // Update an existing ToDo item
 public async Task UpdateItemAsync(string id, TodoItem item)
 {
-    await _container.UpsertItemAsync(item, new PartitionKey(id));
+    await _container.UpsertItemAsync(item, PartitionKey.None);
 }
 
 // Delete a ToDo item
 public async Task DeleteItemAsync(string id)
 {
-    await _container.DeleteItemAsync<TodoItem>(id, new PartitionKey(id));
+    await _container.DeleteItemAsync<TodoItem>(id, PartitionKey.None);
 }
 
 // Get all ToDo items
