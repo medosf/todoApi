@@ -30,7 +30,6 @@ public class NewsService
             {
                 var jsonContent = await response.Content.ReadAsStringAsync();
                 var newsResponse = JsonSerializer.Deserialize<NewsApiResponse>(jsonContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                _logger.LogInformation($"newsResponse >>>> {newsResponse}");
                 return newsResponse;
             }
             else
