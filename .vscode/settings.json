@@ -1,0 +1,5 @@
+{
+    "appService.preDeployTask": "publish-release",
+    "appService.deploySubpath": "bin/Release/net6.0/publish",
+    "appService.defaultWebAppToDeploy": "/subscriptions/54046440-7ad5-4fec-8429-5a222efc6f77/resourceGroups/firstApp/providers/Microsoft.Web/sites/crud5"
+}
