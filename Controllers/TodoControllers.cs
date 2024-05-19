@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using todoApi.Models;
+using todoApi.Service;
 
 namespace todoApi.Controllers
 {
@@ -10,17 +8,17 @@ namespace todoApi.Controllers
     [ApiController]
     public class TodoController : ControllerBase
     {
-        private readonly CosmosDbService _cosmosDbService;
+        private readonly ICosmosDbService _cosmosDbService;
 
-        public TodoController(IConfiguration configuration)
+        public TodoController(ICosmosDbService cosmosDbService)
         {
-            _cosmosDbService = new CosmosDbService(configuration);
-        }
+          _cosmosDbService = cosmosDbService;
+         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TodoItem>>> GetAll()
         {
-            var items = await _cosmosDbService.GetItemsAsync("SELECT * FROM c");
+            var items = await _cosmosDbService.GetTodoItemsAsync("SELECT * FROM c");
                if (items == null)
             {
                 return NotFound("Somthing went wrong");
@@ -32,7 +30,7 @@ namespace todoApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<TodoItem>> GetById(string id)
         {
-            var item = await _cosmosDbService.GetItemAsync(id);
+            var item = await _cosmosDbService.GetTodoItemAsync(id);
             if (item == null)
             {
                 return NotFound("Somthing went wrong");
@@ -48,7 +46,7 @@ namespace todoApi.Controllers
                     item.Id = Guid.NewGuid().ToString(); // Generating a new unique string ID if not provided
                  }
 
-                 await _cosmosDbService.AddItemAsync(item);
+                 await _cosmosDbService.AddTodoItemAsync(item);
              return Ok();
         }
 
