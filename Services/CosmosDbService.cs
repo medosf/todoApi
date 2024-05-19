@@ -1,5 +1,4 @@
 using Microsoft.Azure.Cosmos;
-
 using todoApi.Models;
 
 namespace todoApi.Service;
@@ -43,19 +42,35 @@ public class CosmosDbService : ICosmosDbService
         return null; 
     }
 
-    public async Task AddTodoItemAsync(TodoItem item)
+    public async Task<TodoItem> AddTodoItemAsync(TodoItem item)
     {
-        await _container.CreateItemAsync<TodoItem>(item, new PartitionKey(item.Id));
+        try{
+            return await _container.CreateItemAsync(item, new PartitionKey(item.Id));
+
+        }catch(Exception ex){
+            Console.WriteLine($"Error adding item to CosmosDB >>>>>, {ex.Message}");
+            return null;
+        }
     }
 
     public async Task UpdateTodoItemAsync(string id, TodoItem item)
     {
+        try{
         await _container.UpsertItemAsync<TodoItem>(item, new PartitionKey(id));
+
+        }catch(Exception ex){
+            Console.WriteLine($"Error updating item in CosmosDB >>>>>, {ex.Message}");
+        }
     }
 
     public async Task DeleteItemAsync(string id)
     {
+        try{
         await _container.DeleteItemAsync<TodoItem>(id, new PartitionKey(id));
+
+        }catch(Exception ex){
+            Console.WriteLine($"Error deleting item from CosmosDB >>>>>, {ex.Message}");
+        }
     }
 
 }

@@ -21,7 +21,7 @@ namespace todoApi.Controllers
             var items = await _cosmosDbService.GetTodoItemsAsync("SELECT * FROM c");
                if (items == null)
             {
-                return NotFound("Somthing went wrong");
+                return NotFound("No items found");
             }
           
             return Ok(items);
@@ -33,7 +33,7 @@ namespace todoApi.Controllers
             var item = await _cosmosDbService.GetTodoItemAsync(id);
             if (item == null)
             {
-                return NotFound("Somthing went wrong");
+                return NotFound("Item not found");
             }
             return item;
         }
@@ -41,13 +41,13 @@ namespace todoApi.Controllers
         [HttpPost]
         public async Task<ActionResult<TodoItem>> CreateItem(TodoItem item)
         {
-            if (string.IsNullOrEmpty(item.Id))
-                 {
-                    item.Id = Guid.NewGuid().ToString(); // Generating a new unique string ID if not provided
-                 }
-
+     
+            if(item.Id == null){
+                return BadRequest("Id is required");
+            }
+        
                  await _cosmosDbService.AddTodoItemAsync(item);
-             return Ok();
+             return Ok(item);
         }
 
         [HttpDelete("{id}")]
@@ -56,7 +56,5 @@ namespace todoApi.Controllers
             await _cosmosDbService.DeleteItemAsync(id);
             return NoContent();
         }
-        
-        // Add the Update (PUT) method here
     }
 }
